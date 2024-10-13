@@ -17,6 +17,10 @@ const writeData = (data) => {
   fs.writeFileSync('./data.json', JSON.stringify(data, null, 2));
 };
 
+app.get('/', (req, res) => {
+  res.json("Welcome To Express API");
+})
+
 // GET: Retrieve all items
 app.get('/api/items', (req, res) => {
   const items = readData();
