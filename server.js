@@ -27,16 +27,32 @@ app.get('/api/items', (req, res) => {
   res.json(items);
 });
 
+app.get('/api/items/:id', (req, res) => {
+  const items = readData();
+  const itemId = parseInt(req.params.id);
+  const item = items.find(i => i.id === itemId);
+
+  if (!item) {
+    return res.status(404).json({ message: 'Item not found' });
+  }
+
+  res.json({Message: "Item found Successful", item: item});
+});
+
 // POST: Add a new item
 app.post('/api/items', (req, res) => {
   const items = readData();
+  if(!req.body.name)
+  {
+    return res.status(400).json({Message: "Invalid Data"});
+  }
   const newItem = {
     id: items.length + 1,
     name: req.body.name
   };
   items.push(newItem);
   writeData(items);
-  res.status(201).json({Message: "Item Sent Successfully", Item: newItem});
+  res.status(201).json({Message: "Item Created Successfully", Item: newItem});
 });
 
 // PUT: Update an existing item
@@ -53,7 +69,7 @@ app.put('/api/items/:id', (req, res) => {
   item.name = req.body.name;
   item.id = req.body.id;
   writeData(items);
-  res.json({Message: "Item Updated Successfully", item: item});
+  res.status(200).json({Message: "Item Updated Successfully", item: item});
 });
 
 // DELETE: Remove an item
@@ -68,7 +84,7 @@ app.delete('/api/items/:id', (req, res) => {
 
   const deletedItem = items.splice(itemIndex, 1);
   writeData(items);
-  res.json({Message: "Item Deleted Successfully", item: deletedItem});
+  res.status(204).json({Message: "Item Deleted Successfully", item: deletedItem});
 });
 
 // Start the server
