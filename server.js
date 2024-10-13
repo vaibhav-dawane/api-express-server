@@ -47,7 +47,7 @@ app.post('/api/items', (req, res) => {
     return res.status(400).json({Message: "Invalid Data"});
   }
   const newItem = {
-    id: items.length + 1,
+    id: req.body.id,
     name: req.body.name
   };
   items.push(newItem);
@@ -84,7 +84,7 @@ app.delete('/api/items/:id', (req, res) => {
 
   const deletedItem = items.splice(itemIndex, 1);
   writeData(items);
-  res.status(204).json({Message: "Item Deleted Successfully", item: deletedItem});
+  res.status(200).json({Message: "Item Deleted Successfully", item: deletedItem});
 });
 
 // Start the server
